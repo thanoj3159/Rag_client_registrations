@@ -1,11 +1,15 @@
 const { Pool } = require('pg');
 
+const isProduction = process.env.DB_HOST && process.env.DB_HOST !== 'localhost';
+
 const pool = new Pool({
   user: process.env.DB_USER || 'postgres',
   host: process.env.DB_HOST || 'localhost',
   database: process.env.DB_DATABASE || 'clients',
   password: process.env.DB_PASSWORD || '2806',
   port: parseInt(process.env.DB_PORT || '5432'),
+  // SSL is required for Neon.tech; disabled for local pgAdmin
+  ssl: isProduction ? { rejectUnauthorized: false } : false,
 });
 
 pool.on('error', (err) => {
