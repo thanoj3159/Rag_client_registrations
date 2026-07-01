@@ -96,3 +96,5 @@ app.listen(4242, () => {
   console.log('   POST http://localhost:4242/create-order');
   console.log('   POST http://localhost:4242/verify-payment');
 });
+
+module.exports = app;
