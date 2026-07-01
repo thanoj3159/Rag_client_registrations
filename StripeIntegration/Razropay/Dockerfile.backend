@@ -1,0 +1,20 @@
+# Backend Dockerfile
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copy package files from the backend subdirectory
+COPY StripeIntegration/Razropay/package*.json ./StripeIntegration/Razropay/
+
+# Install dependencies for the backend
+RUN cd StripeIntegration/Razropay && npm ci --only=production
+
+# Copy the backend code and the database module
+COPY StripeIntegration/Razropay/ ./StripeIntegration/Razropay/
+COPY database/ ./database/
+
+# Expose backend port
+EXPOSE 4242
+
+# Run the server from the workspace root context
+CMD ["node", "StripeIntegration/Razropay/server.js"]

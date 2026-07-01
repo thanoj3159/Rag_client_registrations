@@ -1,0 +1,43 @@
+.hero-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.hero-card {
+  background-color: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 700px;
+  max-width: 90%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+}
+
+.icon-container {
+  margin-bottom: 1.5rem;
+}
+
+.chat-icon {
+  color: #00e5ff;
+}
+
+.hero-title {
+  color: #00e5ff;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin: 0 0 0.5rem 0;
+}
+
+.hero-subtitle {
+  color: #4a5568;
+  font-size: 0.9rem;
+  margin: 0;
+}

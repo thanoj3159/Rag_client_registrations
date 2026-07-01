@@ -1,0 +1,18 @@
+# Frontend .dockerignore
+node_modules
+dist
+.git
+.github
+*.log
+.env
+.env.local
+.env.*.local
+.DS_Store
+*.md
+Dockerfile*
+docker-compose*
+nginx.conf
+StripeIntegration
+check-db.cjs
+create-table.cjs
+test-db.cjs

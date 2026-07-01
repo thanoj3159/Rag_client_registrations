@@ -1,0 +1,43 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install frontend dependencies
+        run: npm ci
+        working-directory: ./
+
+      - name: Run frontend lint
+        run: npm run lint 2>/dev/null || echo "No lint script"
+        working-directory: ./
+
+      - name: Build frontend
+        run: npm run build
+        working-directory: ./
+
+      - name: Install backend dependencies
+        run: npm ci
+        working-directory: ./StripeIntegration/Razropay
+
+      - name: Run backend lint
+        run: npm run lint 2>/dev/null || echo "No lint script in backend"
+        working-directory: ./StripeIntegration/Razropay

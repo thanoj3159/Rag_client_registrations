@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Checkout Demo</title>
+</head>
+<body>
+  <h1>Buy Your Product — $20.00</h1>
+  <button id="checkout-button">Pay with card</button>
+
+  <script>
+    document.getElementById('checkout-button').addEventListener('click', async () => {
+      const res = await fetch('/create-checkout-session', { method: 'POST' });
+      const data = await res.json();
+      if (data.url) {
+        window.location = data.url; // redirect to Stripe-hosted checkout page
+      } else {
+        alert('Something went wrong: ' + data.error);
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head><title>Payment Successful</title></head>
+<body>
+  <h1>✅ Payment successful!</h1>
+  <p id="details">Loading order details...</p>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+
+    fetch(`/session-status?session_id=${sessionId}`)
+      .then(r => r.json())
+      .then(data => {
+        document.getElementById('details').textContent =
+          `Confirmed for ${data.customer_email || 'you'} — amount charged: $${(data.amount_total / 100).toFixed(2)}`;
+      });
+  </script>
+</body>
+</html>

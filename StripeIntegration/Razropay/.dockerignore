@@ -1,0 +1,14 @@
+# Backend .dockerignore
+node_modules
+.git
+.github
+*.log
+.env
+.env.local
+.env.*.local
+.DS_Store
+*.md
+Dockerfile*
+docker-compose*
+*.cjs
+*.js.map
