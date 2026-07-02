@@ -100,7 +100,7 @@ const ApplicationForm = () => {
     try {
       const cleanMobile = formData.adminMobile.replace(/\D/g, '');
       const fullPhoneNumber = `${countryCode}${cleanMobile}`;
-      const response = await fetch(`/api/razorpay/create-order`, {
+      const response = await fetch(`https://ragclientregistrations-production.up.railway.app/create-order`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -136,7 +136,7 @@ const ApplicationForm = () => {
       handler: async (response) => {
         // Verify the payment on the backend
         try {
-          const verifyRes = await fetch('/api/razorpay/verify-payment', {
+          const verifyRes = await fetch('https://ragclientregistrations-production.up.railway.app/verify-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
