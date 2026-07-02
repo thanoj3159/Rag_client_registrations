@@ -1,16 +1,19 @@
 const { Pool } = require('pg');
 
-const isProduction = process.env.DB_HOST && process.env.DB_HOST !== 'localhost';
-
-const pool = new Pool({
-  user: process.env.DB_USER || 'postgres',
-  host: process.env.DB_HOST || 'localhost',
-  database: process.env.DB_DATABASE || 'clients',
-  password: process.env.DB_PASSWORD || '2806',
-  port: parseInt(process.env.DB_PORT || '5432'),
-  // SSL is required for Neon.tech; disabled for local pgAdmin
-  ssl: isProduction ? { rejectUnauthorized: false } : false,
-});
+// Use full DATABASE_URL if available (Vercel+Neon), otherwise use individual vars (local)
+const pool = process.env.DATABASE_URL
+  ? new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    })
+  : new Pool({
+      user: process.env.DB_USER || 'postgres',
+      host: process.env.DB_HOST || 'localhost',
+      database: process.env.DB_DATABASE || 'clients',
+      password: process.env.DB_PASSWORD || '2806',
+      port: parseInt(process.env.DB_PORT || '5432'),
+      ssl: false,
+    });
 
 pool.on('error', (err) => {
   console.error('Unexpected error on idle pg client', err);
@@ -18,11 +21,6 @@ pool.on('error', (err) => {
 
 /**
  * Saves client's initial details before completing the payment
- * @param {string} name
- * @param {string} email
- * @param {string} mobile
- * @param {string} orderId
- * @returns {Promise<object>}
  */
 const savePendingClient = async (name, email, mobile, orderId) => {
   const query = `
@@ -35,7 +33,6 @@ const savePendingClient = async (name, email, mobile, orderId) => {
     RETURNING *;
   `;
   const values = [name, email, mobile, false, orderId];
-  
   try {
     const res = await pool.query(query, values);
     console.log(`💾 Pending client saved: ${name} (Order: ${orderId})`);
@@ -47,10 +44,7 @@ const savePendingClient = async (name, email, mobile, orderId) => {
 };
 
 /**
- * Confirms payment and updates payment_status to true (boolean)
- * @param {string} orderId
- * @param {string} paymentId
- * @returns {Promise<object>}
+ * Confirms payment and updates payment_status to true
  */
 const confirmClientPayment = async (orderId, paymentId) => {
   const query = `
@@ -61,13 +55,12 @@ const confirmClientPayment = async (orderId, paymentId) => {
     RETURNING *;
   `;
   const values = [paymentId, orderId];
-  
   try {
     const res = await pool.query(query, values);
     if (res.rowCount === 0) {
       console.warn(`⚠️ No client record found matching order_id: ${orderId}`);
     } else {
-      console.log(`✅ Client payment verified in database for client ID: ${res.rows[0].id}`);
+      console.log(`✅ Payment verified in DB for client ID: ${res.rows[0].id}`);
     }
     return res.rows[0];
   } catch (err) {
@@ -76,8 +69,4 @@ const confirmClientPayment = async (orderId, paymentId) => {
   }
 };
 
-module.exports = {
-  pool,
-  savePendingClient,
-  confirmClientPayment,
-};
+module.exports = { pool, savePendingClient, confirmClientPayment };

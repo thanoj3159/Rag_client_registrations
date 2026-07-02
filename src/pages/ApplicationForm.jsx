@@ -100,15 +100,15 @@ const ApplicationForm = () => {
     try {
       const cleanMobile = formData.adminMobile.replace(/\D/g, '');
       const fullPhoneNumber = `${countryCode}${cleanMobile}`;
-      const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4242'}/create-order`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: formData.adminName,
-          email: formData.adminEmail,
-          mobile: fullPhoneNumber,
-        }),
-      });
+      const response = await fetch(`/api/razorpay/create-order`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: formData.adminName,
+            email: formData.adminEmail,
+            mobile: fullPhoneNumber,
+          }),
+        });
       orderData = await response.json();
       if (!response.ok) throw new Error(orderData.error || 'Failed to create order');
     } catch (err) {
@@ -136,7 +136,7 @@ const ApplicationForm = () => {
       handler: async (response) => {
         // Verify the payment on the backend
         try {
-          const verifyRes = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4242'}/verify-payment`, {
+          const verifyRes = await fetch('/api/razorpay/verify-payment', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
