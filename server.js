@@ -207,8 +207,9 @@ app.post('/create-order', async (req, res) => {
       key_id: process.env.RAZORPAY_KEY_ID,
     });
   } catch (err) {
-    console.error('Error creating Razorpay order:', err);
-    res.status(500).json({ error: err.message });
+    console.error('Error creating Razorpay order:', JSON.stringify(err));
+    const errorMsg = err.error?.description || err.message || JSON.stringify(err);
+    res.status(500).json({ error: errorMsg });
   }
 });
 
