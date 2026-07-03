@@ -9,8 +9,10 @@ services:
       - "80:80"
     depends_on:
       - backend
+      - twilio-backend
     environment:
       - VITE_API_URL=http://localhost:4242
+      - VITE_TWILIO_API_URL=http://localhost:3001
 
   backend:
     build:
@@ -27,6 +29,19 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_PORT=${DB_PORT:-5432}
       - FRONTEND_URL=http://localhost
+    env_file:
+      - .env
+
+  twilio-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    ports:
+      - "3001:3001"
+    environment:
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - TWILIO_VERIFY_SERVICE_SID=${TWILIO_VERIFY_SERVICE_SID}
     env_file:
       - .env
 

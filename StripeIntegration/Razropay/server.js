@@ -90,11 +90,12 @@ app.post('/verify-payment', async (req, res) => {
   }
 });
 
-app.listen(4242, () => {
-  console.log('✅ Razorpay server running on http://localhost:4242');
+const PORT = process.env.PORT || 4242;
+app.listen(PORT, () => {
+  console.log(`✅ Razorpay server running on port ${PORT}`);
   console.log('   Endpoints:');
-  console.log('   POST http://localhost:4242/create-order');
-  console.log('   POST http://localhost:4242/verify-payment');
+  console.log(`   POST http://localhost:${PORT}/create-order`);
+  console.log(`   POST http://localhost:${PORT}/verify-payment`);
 });
 
 module.exports = app;
