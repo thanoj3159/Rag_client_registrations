@@ -90,9 +90,9 @@ const confirmClientPayment = async (orderId, paymentId) => {
 // ================================================================
 // Twilio OTP Endpoints
 // ================================================================
-const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID;
-const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN;
-const VERIFY_SERVICE_SID = process.env.TWILIO_VERIFY_SERVICE_SID;
+const TWILIO_ACCOUNT_SID = process.env.TWILIO_ACCOUNT_SID || process.env.VITE_TWILIO_ACCOUNT_SID;
+const TWILIO_AUTH_TOKEN = process.env.TWILIO_AUTH_TOKEN || process.env.VITE_TWILIO_AUTH_TOKEN;
+const VERIFY_SERVICE_SID = process.env.TWILIO_VERIFY_SERVICE_SID || process.env.VITE_TWILIO_VERIFY_SERVICE_SID;
 
 const TWILIO_API_BASE = `https://verify.twilio.com/v2/Services/${VERIFY_SERVICE_SID}`;
 const AUTH_HEADER = `Basic ${Buffer.from(`${TWILIO_ACCOUNT_SID}:${TWILIO_AUTH_TOKEN}`).toString('base64')}`;
