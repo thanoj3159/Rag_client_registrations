@@ -1,4 +1,4 @@
-# Backend Dockerfile for Twilio OTP
+# Combined Backend Dockerfile (Twilio OTP + Razorpay Payments)
 FROM node:20-alpine
 
 WORKDIR /app
@@ -6,7 +6,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm ci --only=production
 
-COPY src/services/twilio.js ./src/services/twilio.js
 COPY server.js ./
 
 EXPOSE 3001
