@@ -162,12 +162,25 @@ app.post('/api/twilio/verify-otp', async (req, res) => {
 // ================================================================
 // Razorpay Payment Endpoints
 // ================================================================
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
+console.log(`🔑 RAZORPAY_KEY_ID present: ${!!process.env.RAZORPAY_KEY_ID}`);
+console.log(`🔑 RAZORPAY_KEY_SECRET present: ${!!process.env.RAZORPAY_KEY_SECRET}`);
+
+let razorpay;
+try {
+  razorpay = new Razorpay({
+    key_id: process.env.RAZORPAY_KEY_ID,
+    key_secret: process.env.RAZORPAY_KEY_SECRET,
+  });
+  console.log('✅ Razorpay initialized successfully');
+} catch (err) {
+  console.error('❌ Razorpay initialization failed:', err.message);
+}
 
 app.post('/create-order', async (req, res) => {
+  if (!razorpay) {
+    return res.status(500).json({ error: 'Razorpay not initialized. Check RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET env vars.' });
+  }
+
   const { name, email, mobile } = req.body;
 
   if (!name || !email || !mobile) {
