@@ -240,7 +240,18 @@ app.post('/verify-payment', async (req, res) => {
 // Health Check
 // ================================================================
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok' });
+  res.json({
+    status: 'ok',
+    env: {
+      RAZORPAY_KEY_ID: !!process.env.RAZORPAY_KEY_ID,
+      RAZORPAY_KEY_SECRET: !!process.env.RAZORPAY_KEY_SECRET,
+      TWILIO_ACCOUNT_SID: !!(process.env.TWILIO_ACCOUNT_SID || process.env.VITE_TWILIO_ACCOUNT_SID),
+      TWILIO_AUTH_TOKEN: !!(process.env.TWILIO_AUTH_TOKEN || process.env.VITE_TWILIO_AUTH_TOKEN),
+      TWILIO_VERIFY_SERVICE_SID: !!(process.env.TWILIO_VERIFY_SERVICE_SID || process.env.VITE_TWILIO_VERIFY_SERVICE_SID),
+      DATABASE_URL: !!process.env.DATABASE_URL,
+      FRONTEND_URL: !!process.env.FRONTEND_URL,
+    }
+  });
 });
 
 // ================================================================
